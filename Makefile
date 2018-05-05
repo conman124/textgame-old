@@ -20,4 +20,4 @@ clean:
 	rm -rf build bin deps
 
 include core/core.mk
--include $(shell find $(DEPDIR) -name "*.d")
+-include $(shell find $(DEPDIR) -name "*.d" 2>/dev/null)

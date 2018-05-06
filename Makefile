@@ -7,6 +7,11 @@ BUILDDIR=build/
 BINDIR=bin/
 DEPDIR=deps/
 
+
+.PHONY: debug
+debug: CXXFLAGS += -g
+debug: all
+
 .PHONY: all
 all: bin/game
 

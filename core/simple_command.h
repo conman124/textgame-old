@@ -11,15 +11,12 @@
 
 
 // TODO command parameters: maybe a method that returns a tuple of parameters that the executor will receive
-// TODO make executor a template parameter?
 // TODO give executor access to actor somehow
-template <const std::string& name>
+template <const std::string& name, const std::function<void()>& executor>
 class SimpleCommand: public UnboundCommand {
     public:
         virtual ~SimpleCommand() { }
         std::list<std::unique_ptr<BoundCommand>> resolve(std::shared_ptr<Creature> actor, std::string command) override final;
-    protected:
-        virtual std::function<void()> getExecutor() = 0;
 };
 
 class SimpleBoundCommand : public BoundCommand {
@@ -37,12 +34,12 @@ class SimpleBoundCommand : public BoundCommand {
         std::function<void()> executor;
 };
 
-template <const std::string& name>
-std::list<std::unique_ptr<BoundCommand>> SimpleCommand<name>::resolve(std::shared_ptr<Creature> actor, std::string command) {
+template <const std::string& name, const std::function<void()>& executor>
+std::list<std::unique_ptr<BoundCommand>> SimpleCommand<name, executor>::resolve(std::shared_ptr<Creature> actor, std::string command) {
     std::list<std::unique_ptr<BoundCommand>> boundCommands;
     // TODO rework the check to determine if this is the right command.
     if(command.compare(0, name.length(), name) == 0) {
-        boundCommands.push_back(std::move(std::make_unique<SimpleBoundCommand>(actor, this->getExecutor())));
+        boundCommands.push_back(std::move(std::make_unique<SimpleBoundCommand>(actor, executor)));
     }
     return boundCommands;
 }

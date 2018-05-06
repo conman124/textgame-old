@@ -8,6 +8,7 @@
 #include "driver.h"
 #include "unbound_command.h"
 #include "simple_command.h"
+#include "room.h"
 
 Driver::Driver() 
     : running(true)
@@ -15,7 +16,10 @@ Driver::Driver()
     , commandsMutex()
     , commands()
     , heartbeatThread(beginHeartbeat())
-{ }
+{
+    std::shared_ptr<Room> room = std::make_shared<Room>();
+    this->player->moveToRoom(room);
+}
 
 Driver::~Driver() {
     this->running = false;

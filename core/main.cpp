@@ -4,6 +4,9 @@
 #include "driver.h"
 
 int main(int argc, char** argv) {
+    (void)argc;
+    (void)argv;
+
     Driver driver;
 
     while(std::cin) {

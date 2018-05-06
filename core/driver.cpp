@@ -7,6 +7,7 @@
 
 #include "driver.h"
 #include "unbound_command.h"
+#include "simple_command.h"
 
 Driver::~Driver() {
     this->running = false;
@@ -41,7 +42,7 @@ void Driver::heartbeat() {
 
         std::list<std::unique_ptr<BoundCommand>> boundCommands;
         for(auto& unboundCommand : unboundCommands) {
-            auto someBoundCommands = unboundCommand->resolve(nullptr, "");
+            auto someBoundCommands = unboundCommand->resolve(nullptr, command);
             boundCommands.splice(boundCommands.end(), someBoundCommands, someBoundCommands.begin(), someBoundCommands.end());
         }
         if(boundCommands.size() != 1) {

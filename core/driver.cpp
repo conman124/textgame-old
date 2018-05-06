@@ -9,6 +9,14 @@
 #include "unbound_command.h"
 #include "simple_command.h"
 
+Driver::Driver() 
+    : running(true)
+    , player(std::make_shared<Player>())
+    , commandsMutex()
+    , commands()
+    , heartbeatThread(beginHeartbeat())
+{ }
+
 Driver::~Driver() {
     this->running = false;
     this->heartbeatThread.join();
@@ -42,7 +50,7 @@ void Driver::heartbeat() {
 
         std::list<std::unique_ptr<BoundCommand>> boundCommands;
         for(auto& unboundCommand : unboundCommands) {
-            auto someBoundCommands = unboundCommand->resolve(nullptr, command);
+            auto someBoundCommands = unboundCommand->resolve(this->player, command);
             boundCommands.splice(boundCommands.end(), someBoundCommands, someBoundCommands.begin(), someBoundCommands.end());
         }
         if(boundCommands.size() != 1) {

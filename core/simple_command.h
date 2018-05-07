@@ -7,6 +7,7 @@
 #include <iterator>
 #include <functional>
 #include <tuple>
+#include <optional>
 
 #include "creature.h"
 #include "unbound_command.h"
@@ -18,7 +19,7 @@ template <
     const std::string& Name,
     typename ParameterTuple,
     const std::function<void(ParameterTuple&&)>& Executor,
-    const std::function<ParameterTuple(std::istream_iterator<std::string>)>& Parameterizer
+    const std::function<std::optional<ParameterTuple>(std::istream_iterator<std::string>)>& Parameterizer
 >
 class SimpleCommand: public UnboundCommand {
     public:
@@ -50,7 +51,7 @@ template <
     const std::string& Name,
     typename ParameterTuple,
     const std::function<void(ParameterTuple&&)>& Executor,
-    const std::function<ParameterTuple(std::istream_iterator<std::string>)>& Parameterizer
+    const std::function<std::optional<ParameterTuple>(std::istream_iterator<std::string>)>& Parameterizer
 >
 std::list<std::unique_ptr<BoundCommand>> SimpleCommand<Name, ParameterTuple, Executor, Parameterizer>::resolve(std::shared_ptr<Creature> actor, std::string command) {
     std::list<std::unique_ptr<BoundCommand>> boundCommands;
@@ -58,7 +59,10 @@ std::list<std::unique_ptr<BoundCommand>> SimpleCommand<Name, ParameterTuple, Exe
     std::istream_iterator<std::string> commandwords(commandWordStream);
 
     if(this->doesCommandMatchName(commandwords)) {
-        boundCommands.push_back(std::move(std::make_unique<SimpleBoundCommand<ParameterTuple>>(actor, Executor, std::move(Parameterizer(commandwords)))));
+        std::optional<ParameterTuple>&& parameterization = std::move(Parameterizer(commandwords));
+        if(parameterization) {
+            boundCommands.push_back(std::move(std::make_unique<SimpleBoundCommand<ParameterTuple>>(actor, Executor, std::move(*parameterization))));
+        }
     }
 
     return boundCommands;
@@ -68,7 +72,7 @@ template <
     const std::string& Name,
     typename ParameterTuple,
     const std::function<void(ParameterTuple&&)>& Executor,
-    const std::function<ParameterTuple(std::istream_iterator<std::string>)>& Parameterizer
+    const std::function<std::optional<ParameterTuple>(std::istream_iterator<std::string>)>& Parameterizer
 >
 bool SimpleCommand<Name, ParameterTuple, Executor, Parameterizer>::doesCommandMatchName(std::istream_iterator<std::string>& commandwords) {
     std::istringstream nameWordStream(Name);

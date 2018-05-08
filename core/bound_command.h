@@ -4,6 +4,8 @@
 
 #include "creature.h"
 
+class Creature;
+
 class BoundCommand {
     public:
         BoundCommand(std::shared_ptr<Creature> _actor) : actor(_actor) { }

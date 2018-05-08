@@ -14,12 +14,11 @@
 #include "bound_command.h"
 
 
-// TODO give executor access to actor somehow
 template <
     const std::string& Name,
     typename ParameterTuple,
-    const std::function<void(Creature&, ParameterTuple&&)>& Executor,
-    const std::function<std::optional<ParameterTuple>(std::istream_iterator<std::string>)>& Parameterizer
+    const std::function<std::optional<ParameterTuple>(std::istream_iterator<std::string>)>& Parameterizer,
+    const std::function<void(Creature&, ParameterTuple&&)>& Executor
 >
 class SimpleCommand: public UnboundCommand {
     public:
@@ -50,10 +49,10 @@ class SimpleBoundCommand : public BoundCommand {
 template <
     const std::string& Name,
     typename ParameterTuple,
-    const std::function<void(Creature&, ParameterTuple&&)>& Executor,
-    const std::function<std::optional<ParameterTuple>(std::istream_iterator<std::string>)>& Parameterizer
+    const std::function<std::optional<ParameterTuple>(std::istream_iterator<std::string>)>& Parameterizer,
+    const std::function<void(Creature&, ParameterTuple&&)>& Executor
 >
-std::list<std::unique_ptr<BoundCommand>> SimpleCommand<Name, ParameterTuple, Executor, Parameterizer>::resolve(std::shared_ptr<Creature> actor, std::string command) {
+std::list<std::unique_ptr<BoundCommand>> SimpleCommand<Name, ParameterTuple, Parameterizer, Executor>::resolve(std::shared_ptr<Creature> actor, std::string command) {
     std::list<std::unique_ptr<BoundCommand>> boundCommands;
     std::istringstream commandWordStream(command);
     std::istream_iterator<std::string> commandwords(commandWordStream);
@@ -71,10 +70,10 @@ std::list<std::unique_ptr<BoundCommand>> SimpleCommand<Name, ParameterTuple, Exe
 template <
     const std::string& Name,
     typename ParameterTuple,
-    const std::function<void(Creature&, ParameterTuple&&)>& Executor,
-    const std::function<std::optional<ParameterTuple>(std::istream_iterator<std::string>)>& Parameterizer
+    const std::function<std::optional<ParameterTuple>(std::istream_iterator<std::string>)>& Parameterizer,
+    const std::function<void(Creature&, ParameterTuple&&)>& Executor
 >
-bool SimpleCommand<Name, ParameterTuple, Executor, Parameterizer>::doesCommandMatchName(std::istream_iterator<std::string>& commandwords) {
+bool SimpleCommand<Name, ParameterTuple, Parameterizer, Executor>::doesCommandMatchName(std::istream_iterator<std::string>& commandwords) {
     std::istringstream nameWordStream(Name);
     std::istream_iterator<std::string> namewords(nameWordStream);
 

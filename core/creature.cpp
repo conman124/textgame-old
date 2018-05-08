@@ -10,7 +10,7 @@ Creature::Creature()
 
 }
 
-const std::weak_ptr<Room>& Creature::getRoom() {
+std::weak_ptr<Room> Creature::getRoom() {
     return this->room;
 }
 

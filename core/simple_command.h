@@ -88,3 +88,9 @@ bool SimpleCommand<Name, ParameterTuple, Parameterizer, Executor>::doesCommandMa
     }
     return true;
 }
+
+template <typename ParameterTuple>
+using Parameterizer = std::function<std::optional<ParameterTuple>(std::istream_iterator<std::string>)>;
+
+template <typename ParameterTuple>
+using Executor = std::function<void(Creature&, ParameterTuple&&)>;

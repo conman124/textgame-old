@@ -19,7 +19,7 @@ using OptionalParameterTuple = std::optional<ParameterTuple>;
 typedef std::istream_iterator<std::string> CommandWordIterator;
 
 template <typename ParameterTuple>
-using Parameterizer = std::function<OptionalParameterTuple<ParameterTuple>(CommandWordIterator)>;
+using Parameterizer = std::function<OptionalParameterTuple<ParameterTuple>(Creature&, CommandWordIterator)>;
 
 template <typename ParameterTuple>
 using Executor = std::function<void(Creature&, ParameterTuple&&)>;
@@ -68,7 +68,7 @@ std::list<std::unique_ptr<BoundCommand>> SimpleCommand<Name, ParameterTuple, Par
     CommandWordIterator commandwords(commandWordStream);
 
     if(this->doesCommandMatchName(commandwords)) {
-        std::optional<ParameterTuple>&& parameterization = std::move(Parameterizer(commandwords));
+        std::optional<ParameterTuple>&& parameterization = std::move(Parameterizer(*actor, commandwords));
         if(parameterization) {
             boundCommands.push_back(std::move(std::make_unique<SimpleBoundCommand<ParameterTuple>>(actor, Executor, std::move(*parameterization))));
         }

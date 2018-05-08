@@ -13,25 +13,35 @@
 #include "unbound_command.h"
 #include "bound_command.h"
 
+template <typename ParameterTuple>
+using OptionalParameterTuple = std::optional<ParameterTuple>;
+
+typedef std::istream_iterator<std::string> CommandWordIterator;
+
+template <typename ParameterTuple>
+using Parameterizer = std::function<OptionalParameterTuple<ParameterTuple>(CommandWordIterator)>;
+
+template <typename ParameterTuple>
+using Executor = std::function<void(Creature&, ParameterTuple&&)>;
 
 template <
     const std::string& Name,
     typename ParameterTuple,
-    const std::function<std::optional<ParameterTuple>(std::istream_iterator<std::string>)>& Parameterizer,
-    const std::function<void(Creature&, ParameterTuple&&)>& Executor
+    const Parameterizer<ParameterTuple>& Parameterizer,
+    const Executor<ParameterTuple>& Executor
 >
 class SimpleCommand: public UnboundCommand {
     public:
         virtual ~SimpleCommand() { }
         std::list<std::unique_ptr<BoundCommand>> resolve(std::shared_ptr<Creature> actor, std::string command) override final;
     private:
-        static bool doesCommandMatchName(std::istream_iterator<std::string>& command);
+        static bool doesCommandMatchName(CommandWordIterator& command);
 };
 
 template <typename ParameterTuple>
 class SimpleBoundCommand : public BoundCommand {
     public:
-        SimpleBoundCommand(std::shared_ptr<Creature> _actor, std::function<void(Creature&, ParameterTuple&&)> _executor, ParameterTuple&& _tuple)
+        SimpleBoundCommand(std::shared_ptr<Creature> _actor, Executor<ParameterTuple> _executor, ParameterTuple&& _tuple)
             : BoundCommand(_actor)
             , executor(_executor)
             , tuple(std::move(_tuple))
@@ -42,20 +52,20 @@ class SimpleBoundCommand : public BoundCommand {
         }
 
     private:
-        std::function<void(Creature&, ParameterTuple&&)> executor;
+        Executor<ParameterTuple> executor;
         ParameterTuple tuple;
 };
 
 template <
     const std::string& Name,
     typename ParameterTuple,
-    const std::function<std::optional<ParameterTuple>(std::istream_iterator<std::string>)>& Parameterizer,
-    const std::function<void(Creature&, ParameterTuple&&)>& Executor
+    const Parameterizer<ParameterTuple>& Parameterizer,
+    const Executor<ParameterTuple>& Executor
 >
 std::list<std::unique_ptr<BoundCommand>> SimpleCommand<Name, ParameterTuple, Parameterizer, Executor>::resolve(std::shared_ptr<Creature> actor, std::string command) {
     std::list<std::unique_ptr<BoundCommand>> boundCommands;
     std::istringstream commandWordStream(command);
-    std::istream_iterator<std::string> commandwords(commandWordStream);
+    CommandWordIterator commandwords(commandWordStream);
 
     if(this->doesCommandMatchName(commandwords)) {
         std::optional<ParameterTuple>&& parameterization = std::move(Parameterizer(commandwords));
@@ -70,14 +80,14 @@ std::list<std::unique_ptr<BoundCommand>> SimpleCommand<Name, ParameterTuple, Par
 template <
     const std::string& Name,
     typename ParameterTuple,
-    const std::function<std::optional<ParameterTuple>(std::istream_iterator<std::string>)>& Parameterizer,
-    const std::function<void(Creature&, ParameterTuple&&)>& Executor
+    const Parameterizer<ParameterTuple>& Parameterizer,
+    const Executor<ParameterTuple>& Executor
 >
-bool SimpleCommand<Name, ParameterTuple, Parameterizer, Executor>::doesCommandMatchName(std::istream_iterator<std::string>& commandwords) {
+bool SimpleCommand<Name, ParameterTuple, Parameterizer, Executor>::doesCommandMatchName(CommandWordIterator& commandwords) {
     std::istringstream nameWordStream(Name);
-    std::istream_iterator<std::string> namewords(nameWordStream);
+    CommandWordIterator namewords(nameWordStream);
 
-    std::istream_iterator<std::string> end;
+    CommandWordIterator end;
 
     while(namewords != end) {
         if(commandwords == end || *namewords != *commandwords) {
@@ -88,14 +98,3 @@ bool SimpleCommand<Name, ParameterTuple, Parameterizer, Executor>::doesCommandMa
     }
     return true;
 }
-
-template <typename ParameterTuple>
-using Parameterizer = std::function<std::optional<ParameterTuple>(std::istream_iterator<std::string>)>;
-
-template <typename ParameterTuple>
-using OptionalParameterTuple = std::optional<ParameterTuple>;
-
-typedef std::istream_iterator<std::string> CommandWordIterator;
-
-template <typename ParameterTuple>
-using Executor = std::function<void(Creature&, ParameterTuple&&)>;

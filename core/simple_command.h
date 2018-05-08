@@ -93,4 +93,9 @@ template <typename ParameterTuple>
 using Parameterizer = std::function<std::optional<ParameterTuple>(std::istream_iterator<std::string>)>;
 
 template <typename ParameterTuple>
+using OptionalParameterTuple = std::optional<ParameterTuple>;
+
+typedef std::istream_iterator<std::string> CommandWordIterator;
+
+template <typename ParameterTuple>
 using Executor = std::function<void(Creature&, ParameterTuple&&)>;

@@ -14,12 +14,12 @@
 
 Driver::Driver() 
     : running(true)
-    , player(std::make_shared<Player>())
+    , player(std::make_shared<Player>(*this))
     , commandsMutex()
     , commands()
     , heartbeatThread(beginHeartbeat())
 {
-    std::shared_ptr<Room> room = std::make_shared<Room>();
+    std::shared_ptr<Room> room = std::make_shared<Room>(*this);
     this->player->moveToRoom(room);
 }
 

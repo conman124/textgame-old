@@ -1,7 +1,8 @@
 #include "room.h"
 
-Room::Room()
-    : creatures()
+Room::Room(Driver& _driver)
+    : driver(_driver)
+    , creatures()
 {
 
 }

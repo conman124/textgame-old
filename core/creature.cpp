@@ -5,8 +5,9 @@
 #include "creature.h"
 #include "room.h"
 
-Creature::Creature()
-    : room()
+Creature::Creature(Driver& _driver)
+    : driver(_driver)
+    , room()
 {
 
 }

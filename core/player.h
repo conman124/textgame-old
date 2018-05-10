@@ -2,6 +2,9 @@
 
 #include "creature.h"
 
-class Player : public Creature {
+class Driver;
 
+class Player : public Creature {
+    public:
+        Player(Driver& driver);
 };

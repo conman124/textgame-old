@@ -13,13 +13,15 @@
 #include "player.h"
 
 Driver::Driver() 
-    : running(true)
+    : roomMaintainer()
+    , running(true)
     , player(std::make_shared<Player>(*this))
     , commandsMutex()
     , commands()
     , heartbeatThread(beginHeartbeat())
 {
     std::shared_ptr<Room> room = std::make_shared<Room>(*this);
+    this->roomMaintainer.add(room);
     this->player->moveToRoom(room);
 }
 

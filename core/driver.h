@@ -8,6 +8,8 @@
 #include <queue>
 #include <string>
 
+#include "room_maintainer.h"
+
 class Player;
 
 class Driver {
@@ -17,6 +19,8 @@ class Driver {
 
         void queueCommand(std::string command);
     private:
+        RoomMaintainer roomMaintainer;
+
         bool running;
 
         std::shared_ptr<Player> player;

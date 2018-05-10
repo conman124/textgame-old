@@ -4,10 +4,8 @@
 #include <list>
 #include <string>
 
-#include "creature.h"
-#include "bound_command.h"
-
 class Creature;
+class BoundCommand;
 
 class UnboundCommand {
     public:

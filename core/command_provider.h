@@ -3,7 +3,7 @@
 #include <list>
 #include <memory>
 
-#include "unbound_command.h"
+class UnboundCommand;
 
 class ICommandProvider {
     public:

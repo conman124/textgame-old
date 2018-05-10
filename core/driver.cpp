@@ -6,9 +6,11 @@
 #include <memory>
 
 #include "driver.h"
+#include "bound_command.h"
 #include "unbound_command.h"
 #include "simple_command.h"
 #include "room.h"
+#include "player.h"
 
 Driver::Driver() 
     : running(true)

@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "creature.h"
+#include "room.h"
 
 Creature::Creature()
     : room()

@@ -1,8 +1,6 @@
 #pragma once
 
-#include <memory.h>
-
-#include "room.h"
+#include <memory>
 
 class Room;
 

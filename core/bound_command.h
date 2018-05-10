@@ -2,8 +2,6 @@
 
 #include <memory>
 
-#include "creature.h"
-
 class Creature;
 
 class BoundCommand {

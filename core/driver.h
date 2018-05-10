@@ -8,7 +8,7 @@
 #include <queue>
 #include <string>
 
-#include "player.h"
+class Player;
 
 class Driver {
     public:

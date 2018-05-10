@@ -3,8 +3,6 @@
 #include <unordered_set>
 #include <memory>
 
-#include "creature.h"
-
 class Creature;
 
 class Room {

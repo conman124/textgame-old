@@ -9,9 +9,10 @@
 #include <tuple>
 #include <optional>
 
-#include "creature.h"
 #include "unbound_command.h"
 #include "bound_command.h"
+
+class Creature;
 
 template <typename ParameterTuple>
 using OptionalParameterTuple = std::optional<ParameterTuple>;

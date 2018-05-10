@@ -9,10 +9,6 @@ RoomMaintainer::RoomMaintainer()
 
 }
 
-void RoomMaintainer::add(std::shared_ptr<Room> room) {
-    this->rooms.insert(room);
-}
-
 void RoomMaintainer::visit(std::shared_ptr<Room> room) {
     this->rooms.insert(room);
 }

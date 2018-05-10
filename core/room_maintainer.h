@@ -6,7 +6,6 @@ class Room;
 class RoomMaintainer {
     public:
         RoomMaintainer();
-        void add(std::shared_ptr<Room> room);
         void visit(std::shared_ptr<Room> room);
         void cleanup();
     private:

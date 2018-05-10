@@ -21,7 +21,7 @@ Driver::Driver()
     , heartbeatThread(beginHeartbeat())
 {
     std::shared_ptr<Room> room = std::make_shared<Room>(*this);
-    this->roomMaintainer.add(room);
+    this->roomMaintainer.visit(room);
     this->player->moveToRoom(room);
 }
 

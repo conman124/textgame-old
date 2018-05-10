@@ -1,4 +1,5 @@
 CXX=g++
+AR=ar
 CPPFLAGS=-I.
 CXXFLAGS=-std=c++17 -Wall -pedantic -Wextra -Wcast-align -Wcast-qual -Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations -Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow=global -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5 -Wswitch-default -Wzero-as-null-pointer-constant -Weffc++ -Wdelete-non-virtual-dtor -Wno-unused-local-typedefs -Werror -Wno-error=unused-parameter -Wno-error=shadow
 LDFLAGS=-Wl,-rpath,.

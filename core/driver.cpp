@@ -11,11 +11,13 @@
 #include "simple_command.h"
 #include "room.h"
 #include "player.h"
+#include "commands/core_command_provider.h"
 
 Driver::Driver() 
     : roomMaintainer()
     , running(true)
     , player(std::make_shared<Player>(*this))
+    , coreCommands(CoreCommandProvider().getCommands())
     , commandsMutex()
     , commands()
     , heartbeatThread(beginHeartbeat())
@@ -45,9 +47,18 @@ void Driver::queueCommand(std::string command) {
     this->commands.push(command);
 }
 
+std::list<std::unique_ptr<BoundCommand>> Driver::attemptCommandResolution(std::shared_ptr<Creature> actor, std::string command) {
+    std::list<std::unique_ptr<BoundCommand>> boundCommands;
+
+    for(auto& unboundCommand : this->coreCommands) {
+        auto someBoundCommands = unboundCommand->resolve(actor, command);
+        boundCommands.splice(boundCommands.end(), someBoundCommands, someBoundCommands.begin(), someBoundCommands.end());
+    }
+    return boundCommands;
+}
+
 void Driver::heartbeat() {
     std::lock_guard<std::mutex> lock(this->commandsMutex);
-    std::list<std::unique_ptr<UnboundCommand>> unboundCommands;
 
     while(this->commands.size() > 0) {
         auto command = this->commands.front();
@@ -56,11 +67,7 @@ void Driver::heartbeat() {
 
         std::cout << "Command: " << command << std::endl;
 
-        std::list<std::unique_ptr<BoundCommand>> boundCommands;
-        for(auto& unboundCommand : unboundCommands) {
-            auto someBoundCommands = unboundCommand->resolve(this->player, command);
-            boundCommands.splice(boundCommands.end(), someBoundCommands, someBoundCommands.begin(), someBoundCommands.end());
-        }
+        std::list<std::unique_ptr<BoundCommand>> boundCommands = this->attemptCommandResolution(this->player, command);
         if(boundCommands.size() != 1) {
             std::cout << "I'm not sure what you mean..." << std::endl;
         } else {

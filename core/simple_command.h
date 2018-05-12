@@ -69,7 +69,7 @@ std::list<std::unique_ptr<BoundCommand>> SimpleCommand<Name, ParameterTuple, Par
     CommandWordIterator commandwords(commandWordStream);
 
     if(this->doesCommandMatchName(commandwords)) {
-        std::optional<ParameterTuple>&& parameterization = std::move(Parameterizer(*actor, commandwords));
+        std::optional<ParameterTuple>&& parameterization = Parameterizer(*actor, commandwords);
         if(parameterization) {
             boundCommands.push_back(std::move(std::make_unique<SimpleBoundCommand<ParameterTuple>>(actor, Executor, std::move(*parameterization))));
         }

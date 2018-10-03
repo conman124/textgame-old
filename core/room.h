@@ -21,9 +21,12 @@ class Room {
         void addExit(std::string name, std::shared_ptr<Room> room);
         std::shared_ptr<Room> getExit(std::string name);
 		std::string dealiasName(std::string name);
-    protected:
-        Driver& driver;
-        std::unordered_set<std::shared_ptr<Creature>> creatures;
 
+		std::string getDescription();
+		void setDescription(std::string _description);
+    protected:
+        std::unordered_set<std::shared_ptr<Creature>> creatures;
+		std::string description;
+        Driver& driver;
         std::unordered_map<std::string, std::weak_ptr<Room>> exits;
 };

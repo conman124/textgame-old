@@ -16,8 +16,9 @@ bool operator==(const std::weak_ptr<T> weak, std::nullptr_t) {
 }
 
 Room::Room(Driver& _driver)
-    : driver(_driver)
-    , creatures()
+    : creatures()
+	, description("")
+	, driver(_driver)
     , exits()
 {
 
@@ -69,4 +70,12 @@ std::string Room::dealiasName(std::string name) {
 	}
 
 	return name;
+}
+
+std::string Room::getDescription() { 
+	return this->description;
+}
+
+void Room::setDescription(std::string _description) { 
+	this->description = _description;
 }

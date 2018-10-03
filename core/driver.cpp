@@ -23,6 +23,10 @@ Driver::Driver()
 		for(int j = 0; j < 3; j++) {
 			rooms[i][j] = std::make_shared<Room>(*this);
 
+			std::ostringstream ss;
+			ss << "Description is " << i << "," << j;
+			rooms[i][j]->setDescription(ss.str());
+
 			if(i > 0) {
 				rooms[i-1][j]->addExit("south", rooms[i][j]);
 				rooms[i][j]->addExit("north", rooms[i-1][j]);

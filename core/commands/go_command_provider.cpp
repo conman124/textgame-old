@@ -19,6 +19,7 @@ namespace {
 		std::shared_ptr<Room> room;
 		assert((room = roomWeak.lock()) != nullptr);
 
+		// Ensure that there's actually a direction given
 		if(commandWords == CommandWordIterator()) {
 			return OptionalParameterTuple<RoomDirectionTuple>();
 		}
@@ -32,6 +33,8 @@ namespace {
 		}
 
 		auto toRoom = room->getExit(out.str());
+		// If there's no exit in the given direction, this command
+		// isn't valid
 		if(toRoom == nullptr) {
 			return OptionalParameterTuple<RoomDirectionTuple>();
 		}

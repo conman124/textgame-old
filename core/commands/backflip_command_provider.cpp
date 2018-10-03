@@ -14,7 +14,11 @@ namespace {
 
 	Parameterizer<StringTuple> adverbParameterizer = [](Creature& actor, CommandWordIterator commandParameters) {
 		(void)actor;
+
+		// Ensure that there are more parameters
+		// (CommmandWordIterator() will be equal the "end" iterator)
 		if(commandParameters == CommandWordIterator()) {
+			// If not return empty optional
 			return OptionalParameterTuple<StringTuple>();
 		}
 		std::ostringstream out;
@@ -25,7 +29,7 @@ namespace {
 			out << " " << *commandParameters;
 			commandParameters++;
 		}
-		return OptionalParameterTuple<StringTuple>(std::make_tuple<std::string>(out.str()));
+		return OptionalParameterTuple<StringTuple>(std::make_tuple(out.str()));
 	};
 	Executor<StringTuple> adverbExecutor = [](Creature& actor, StringTuple&& tuple) {
 		(void)actor;
@@ -35,10 +39,12 @@ namespace {
 
 	Parameterizer<EmptyTuple> plainParameterizer = [](Creature& actor, CommandWordIterator commandParameters) -> OptionalParameterTuple<EmptyTuple> {
 		(void)actor;
+		// If there are more parameter, return empty optional,
+		// because that is an adverb command
 		if(commandParameters != CommandWordIterator()) {
 			return OptionalParameterTuple<EmptyTuple>();
 		}
-		return OptionalParameterTuple<EmptyTuple>(std::make_tuple<>());
+		return OptionalParameterTuple<EmptyTuple>(std::make_tuple());
 	};
 	Executor<EmptyTuple> plainExecutor = [](Creature& actor, EmptyTuple&& tuple) {
 		(void)tuple;

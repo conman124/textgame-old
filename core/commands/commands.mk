@@ -1,7 +1,7 @@
-DIR=core/commands/
+_DIR=core/commands/
 
-$(BUILDDIR)$(DIR)libcommands.a: $(patsubst $(DIR)%.cpp,$(BUILDDIR)$(DIR)%.o,$(wildcard $(DIR)*.cpp))
+$(BUILDDIR)$(_DIR)libcommands.a: $(patsubst $(_DIR)%.cpp,$(BUILDDIR)$(_DIR)%.o,$(wildcard $(_DIR)*.cpp))
 	@mkdir -p $(@D)
 	$(AR) rcs $@ $^
 
-LDFLAGS += -L$(BUILDDIR)$(DIR)
+LDFLAGS := $(LDFLAGS) -L$(BUILDDIR)$(_DIR)

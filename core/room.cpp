@@ -72,7 +72,7 @@ std::string Room::dealiasName(std::string name) {
 	return name;
 }
 
-std::string Room::getDescription() { 
+std::string Room::describe() { 
 	return this->description;
 }
 

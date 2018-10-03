@@ -6,12 +6,14 @@
 #include <iostream>
 
 #include "driver.h"
+#include "traits/traits.h"
+#include "traits/describable.h"
 
 class Creature;
 class Driver;
 class Room;
 
-class Room {
+class Room : public Traits<Describable> {
     public:
         Room(Driver& driver);
         const std::unordered_set<std::shared_ptr<Creature>>& getCreatures();
@@ -22,7 +24,7 @@ class Room {
         std::shared_ptr<Room> getExit(std::string name);
 		std::string dealiasName(std::string name);
 
-		std::string getDescription();
+		std::string describe();
 		void setDescription(std::string _description);
     protected:
         std::unordered_set<std::shared_ptr<Creature>> creatures;

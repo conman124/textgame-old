@@ -1,6 +1,8 @@
-#include "room.h"
-
+#include <algorithm>
 #include <iostream>
+#include <string>
+
+#include "room.h"
 
 template <class T>
 bool operator==(const std::weak_ptr<T> weak, std::nullptr_t);
@@ -35,5 +37,34 @@ void Room::addExit(std::string name, std::shared_ptr<Room> room) {
 }
 
 std::shared_ptr<Room> Room::getExit(std::string name) {
+	name = this->dealiasName(name);
     return (this->exits[name] == nullptr) ? nullptr : this->exits[name].lock();
+}
+
+std::string Room::dealiasName(std::string name) {
+	std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+
+	if(name == "n") {
+		name = "north";
+	} else if (name == "ne") {
+		name = "northeast";
+	} else if (name == "e") {
+		name = "east";
+	} else if (name == "se") {
+		name = "southeast";
+	} else if (name == "s") {
+		name = "south";
+	} else if (name == "sw") {
+		name = "southwest";
+	} else if (name == "w") {
+		name = "west";
+	} else if (name == "nw") {
+		name = "northwest";
+	} else if (name == "u") {
+		name = "up";
+	} else if (name == "d") {
+		name = "down";
+	}
+
+	return name;
 }

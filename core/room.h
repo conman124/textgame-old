@@ -20,6 +20,7 @@ class Room {
 
         void addExit(std::string name, std::shared_ptr<Room> room);
         std::shared_ptr<Room> getExit(std::string name);
+		std::string dealiasName(std::string name);
     protected:
         Driver& driver;
         std::unordered_set<std::shared_ptr<Creature>> creatures;

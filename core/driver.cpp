@@ -22,9 +22,31 @@ Driver::Driver()
     , commands()
     , heartbeatThread(beginHeartbeat())
 {
-    std::shared_ptr<Room> room = std::make_shared<Room>(*this);
-    this->roomMaintainer.visit(room);
-    this->player->moveToRoom(room);
+    std::shared_ptr<Room> rooms[3][3];
+	for(int i = 0; i < 3; i++) {
+		for(int j = 0; j < 3; j++) {
+			rooms[i][j] = std::make_shared<Room>(*this);
+
+			if(i > 0) {
+				rooms[i-1][j]->addExit("south", rooms[i][j]);
+				rooms[i][j]->addExit("north", rooms[i-1][j]);
+
+				if(j > 0) {
+					rooms[i-1][j-1]->addExit("southeast", rooms[i][j]);
+					rooms[i][j]->addExit("northwest", rooms[i-1][j-1]);
+				}
+			}
+
+			if(j > 0) {
+				rooms[i][j-1]->addExit("east", rooms[i][j]);
+				rooms[i][j]->addExit("west", rooms[i][j-1]);
+			}
+
+			this->roomMaintainer.visit(rooms[i][j]);
+		}
+	}
+    
+    this->player->moveToRoom(rooms[1][1]);
 }
 
 Driver::~Driver() {

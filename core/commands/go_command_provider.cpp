@@ -46,9 +46,25 @@ namespace {
 		actor.moveToRoom(std::get<0>(newRoom));
 	};
 
+	// Simple command which follows form "go east"
 	class GoCommand : public SimpleCommand<name,RoomDirectionTuple,parameterizer,executor> {};
+
+	// Command which allows just "east"
+	std::list<std::unique_ptr<BoundCommand>> DirectionCommand::resolve(std::shared_ptr<Creature> actor, std::string command) {
+		std::list<std::unique_ptr<BoundCommand>> boundCommands;
+		std::istringstream commandWordStream(command);
+		CommandWordIterator commandwords(commandWordStream);
+
+		auto&& parameterization = parameterizer(*actor, commandwords);
+		if(parameterization) {
+			boundCommands.push_back(std::move(std::make_unique<SimpleBoundCommand<RoomDirectionTuple>>(actor, executor, std::move(*parameterization))));
+		}
+
+		return boundCommands;
+	}
 }
 
 void provideGoCommands(std::list<std::unique_ptr<UnboundCommand>> &commandList) {
 	commandList.push_back(std::make_unique<GoCommand>());
+	commandList.push_back(std::make_unique<DirectionCommand>());
 }

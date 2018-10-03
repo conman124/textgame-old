@@ -7,6 +7,8 @@
 template <class T>
 bool operator==(const std::weak_ptr<T> weak, std::nullptr_t);
 
+// https://stackoverflow.com/a/45507610/1205493
+// Checks if a weak pointer is empty
 template <class T>
 bool operator==(const std::weak_ptr<T> weak, std::nullptr_t) {
     using wt = std::weak_ptr<T>;

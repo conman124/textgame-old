@@ -12,6 +12,7 @@
 #include "room.h"
 #include "player.h"
 #include "commands/core_command_provider.h"
+#include "commands/look_command_provider.h"
 #include "items/coin.h"
 #include "items/sword.h"
 #include "items/cloak.h"
@@ -64,6 +65,7 @@ Driver::Driver()
 	rooms[2][2]->getItemContainer().addItem(std::make_shared<Sword>());
 
     this->player->moveToRoom(rooms[1][1]);
+	constructRoomLookCommand(this->player)->execute();
 }
 
 void Driver::queueCommand(std::string command) {

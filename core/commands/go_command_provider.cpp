@@ -8,6 +8,7 @@
 #include "../creature.h"
 #include "../room.h"
 #include "go_command_provider.h"
+#include "look_command_provider.h"
 
 namespace {
 	typedef std::tuple<std::shared_ptr<Room>> RoomDirectionTuple;
@@ -44,6 +45,7 @@ namespace {
 
 	Executor<RoomDirectionTuple> executor = [](Creature& actor, RoomDirectionTuple newRoom) {
 		actor.moveToRoom(std::get<0>(newRoom));
+		constructRoomLookCommand(actor.shared_from_this())->execute();
 	};
 
 	// Simple command which follows form "go east"

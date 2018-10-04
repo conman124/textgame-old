@@ -41,9 +41,24 @@ namespace {
 
 	class LookCommand : public SimpleCommand<name, DescribableTuple, parameterizer, executor> { };
 	class ShortLookCommand : public SimpleCommand<shortName, DescribableTuple, parameterizer, executor> { };
+
+	class RoomLookBoundCommand : public BoundCommand {
+		public:
+			RoomLookBoundCommand(std::shared_ptr<Creature> _actor)
+				: BoundCommand(_actor) { }
+
+			void execute() {
+				auto tuple = parameterizer(*this->actor, CommandWordIterator());
+				executor(*this->actor, std::move(*tuple));
+			}
+	};
 }
 
 void provideLookCommands(std::list<std::unique_ptr<UnboundCommand>> &commandList) {
     commandList.push_back(std::make_unique<LookCommand>());
 	commandList.push_back(std::make_unique<ShortLookCommand>());
+}
+
+std::unique_ptr<BoundCommand> constructRoomLookCommand(std::shared_ptr<Creature> actor) {
+	return std::make_unique<RoomLookBoundCommand>(actor);
 }

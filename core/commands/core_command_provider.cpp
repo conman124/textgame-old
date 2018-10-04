@@ -6,6 +6,7 @@
 #include "backflip_command_provider.h"
 #include "go_command_provider.h"
 #include "look_command_provider.h"
+#include "take_command_provider.h"
 
 std::list<std::unique_ptr<UnboundCommand>> CoreCommandProvider::getCommands() {
     std::list<std::unique_ptr<UnboundCommand>> ret;
@@ -13,6 +14,7 @@ std::list<std::unique_ptr<UnboundCommand>> CoreCommandProvider::getCommands() {
 	provideBackflipCommands(ret);
 	provideGoCommands(ret);
 	provideLookCommands(ret);
+	provideTakeCommands(ret);
 
     return ret;
 }

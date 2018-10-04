@@ -77,6 +77,39 @@ void ItemContainer::addItem(std::shared_ptr<Item> item) {
 	this->items.push_back(item);
 }
 
+bool ItemContainer::contains(std::string itemName) {
+	return this->retrieveItems(itemName).size() > 0;
+}
+
+std::list<std::list<std::shared_ptr<Item>>::iterator> ItemContainer::retrieveItems(std::string itemName) {
+	std::list<std::list<std::shared_ptr<Item>>::iterator> ret;
+
+	for(auto it = this->items.begin(); it != this->items.end(); it++) {
+		if((*it)->getPluralName() == itemName) {
+			ret.push_back(it);
+		}
+
+		// Prefer singular name over a plural.  Hopefully, there's never any items that have the same plural
+		// and singular as each other.
+		if((*it)->getName() == itemName) {
+			ret.clear();
+			ret.push_back(it);
+			return ret;
+		}
+	}
+
+	return ret;
+}
+
+void ItemContainer::moveItemsInto(std::string itemName, ItemContainer& other) {
+	auto itemsToMove = this->retrieveItems(itemName);
+
+	for(auto item : itemsToMove) {
+		this->items.erase(item);
+		other.addItem(*item);
+	}
+}
+
 std::unordered_map<std::type_index, size_t> ItemContainer::getGroupedItemCounts() {
 	std::unordered_map<std::type_index, size_t> counts;
 

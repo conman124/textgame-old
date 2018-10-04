@@ -7,6 +7,7 @@
 
 Creature::Creature(Driver& _driver)
     : driver(_driver)
+	, items()
     , room()
 {
 
@@ -28,4 +29,8 @@ void Creature::moveToRoom(std::shared_ptr<Room> _room) {
     }
     _room->addCreature(this->shared_from_this());
     this->room = std::weak_ptr<Room>(_room);
+}
+
+ItemContainer& Creature::getItemContainer() {
+	return this->items;
 }

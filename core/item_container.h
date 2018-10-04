@@ -13,7 +13,10 @@ class ItemContainer : public Describable {
 		ItemContainer();
 		std::string describe();
 		void addItem(std::shared_ptr<Item> item);
+		bool contains(std::string itemName);
+		void moveItemsInto(std::string itemName, ItemContainer& other);
 	private:
+		std::list<std::list<std::shared_ptr<Item>>::iterator> retrieveItems(std::string itemName);
 		std::list<std::shared_ptr<Item>> items;
 
 		std::unordered_map<std::type_index, size_t> getGroupedItemCounts();

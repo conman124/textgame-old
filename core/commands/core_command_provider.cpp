@@ -8,6 +8,7 @@
 #include "look_command_provider.h"
 #include "take_command_provider.h"
 #include "drop_command_provider.h"
+#include "inventory_command_provider.h"
 
 std::list<std::unique_ptr<UnboundCommand>> CoreCommandProvider::getCommands() {
     std::list<std::unique_ptr<UnboundCommand>> ret;
@@ -18,6 +19,7 @@ std::list<std::unique_ptr<UnboundCommand>> CoreCommandProvider::getCommands() {
 	provideLookCommands(ret);
 	provideTakeCommands(ret);
 	provideDropCommands(ret);
+	provideInventoryCommands(ret);
 
     return ret;
 }

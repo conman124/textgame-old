@@ -14,6 +14,9 @@
 
 class Creature;
 
+// TODO figure out a better system for parameterizers.  Many of them end up having the
+// same or very similar code
+
 template <typename ParameterTuple>
 using OptionalParameterTuple = std::optional<ParameterTuple>;
 

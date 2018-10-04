@@ -27,6 +27,7 @@ class Room : public Traits<Describable> {
 
 		std::string describe();
 		void setDescription(std::string _description);
+		ItemContainer& getItemContainer();
     protected:
         std::unordered_set<std::shared_ptr<Creature>> creatures;
 		std::string description;

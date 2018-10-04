@@ -4,6 +4,7 @@
 #include <sstream>
 
 #include "room.h"
+#include "item_container.h"
 
 template <class T>
 bool operator==(const std::weak_ptr<T> weak, std::nullptr_t);
@@ -86,4 +87,8 @@ std::string Room::describe() {
 
 void Room::setDescription(std::string _description) { 
 	this->description = _description;
+}
+
+ItemContainer& Room::getItemContainer() {
+	return this->itemContainer;
 }

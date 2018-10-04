@@ -12,6 +12,7 @@
 #include "room.h"
 #include "player.h"
 #include "commands/core_command_provider.h"
+#include "items/coin.h"
 
 Driver::Driver() 
     : roomMaintainer()
@@ -41,10 +42,14 @@ Driver::Driver()
 				rooms[i][j-1]->addExit("east", rooms[i][j]);
 				rooms[i][j]->addExit("west", rooms[i][j-1]);
 			}
-
+			rooms[i][j]->getItemContainer().addItem(std::make_shared<Coin>());
 			this->roomMaintainer.visit(rooms[i][j]);
 		}
 	}
+
+	rooms[1][1]->getItemContainer().addItem(std::make_shared<Coin>());
+	rooms[1][1]->getItemContainer().addItem(std::make_shared<Coin>());
+	rooms[2][2]->getItemContainer().addItem(std::make_shared<Coin>());
 
     this->player->moveToRoom(rooms[1][1]);
 }

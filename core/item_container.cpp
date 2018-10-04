@@ -18,14 +18,14 @@ std::string ItemContainer::describe() {
 	if(this->items.size() == 0) {
 		return "";
 	} else if(this->items.size() == 1) {
-		os << "There is " << this->items.front()->describe() << " here.";
+		os << "There is " << this->items.front()->getName() << " here.";
 	} else if(this->items.size() == 2) {
 		auto it = this->items.begin();
 		os << "There are ";
-		os << (*it)->describe();
+		os << (*it)->getName();
 		os << " and ";
 		it++;
-		os << (*it)->describe();
+		os << (*it)->getName();
 		os << " here.";
 	} else {
 		auto it = this->items.begin();
@@ -34,7 +34,7 @@ std::string ItemContainer::describe() {
 			if(i == this->items.size() - 1) {
 				os << "and ";
 			}
-			os << (*it)->describe();
+			os << (*it)->getName();
 			if(i != this->items.size() - 1) {
 				os << ", ";
 			}

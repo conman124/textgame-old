@@ -6,7 +6,7 @@
 #include <iostream>
 
 #include "driver.h"
-#include "items/item_container.h"
+#include "item_container.h"
 #include "traits/traits.h"
 #include "traits/describable.h"
 

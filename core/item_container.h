@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "item.h"
-#include "../traits/describable.h"
+#include "traits/describable.h"
 
 class ItemContainer : public Describable {
 	public:

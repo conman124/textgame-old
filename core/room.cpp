@@ -11,7 +11,7 @@ Room::Room(Driver& _driver)
 	, description("")
 	, driver(_driver)
     , exits()
-	, itemContainer()
+	, itemContainer(std::make_unique<RoomItemContainerFormatter>())
 {
 
 }

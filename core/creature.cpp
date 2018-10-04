@@ -7,7 +7,7 @@
 
 Creature::Creature(Driver& _driver)
     : driver(_driver)
-	, items()
+	, itemContainer(std::make_unique<InventoryItemContainerFormatter>())
     , room()
 {
 
@@ -32,5 +32,5 @@ void Creature::moveToRoom(std::shared_ptr<Room> _room) {
 }
 
 ItemContainer& Creature::getItemContainer() {
-	return this->items;
+	return this->itemContainer;
 }

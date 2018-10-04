@@ -16,6 +16,6 @@ class Creature : public std::enable_shared_from_this<Creature> {
 		ItemContainer& getItemContainer();
     protected:
         Driver& driver;
-		ItemContainer items;
+		ItemContainer itemContainer;
         std::weak_ptr<Room> room;
 };

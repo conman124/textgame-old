@@ -11,66 +11,21 @@
 #include "item.h"
 #include "item_container.h"
 
-ItemContainer::ItemContainer()
+ItemContainer::ItemContainer(std::unique_ptr<ItemContainerFormatter> _formatter)
 	: items()
+	, formatter(std::move(_formatter))
 {
 
 }
 
 std::string ItemContainer::describe() {
-	std::ostringstream os;
 	auto counts = this->getGroupedItemCounts();
-
 	switch(counts.size()) {
 		case 0: return "";
-		case 1: {
-			os << "There ";
-			if(counts.begin()->second > 1) {
-				os << "are ";
-			} else {
-				os << "is ";
-			}
-			auto item = this->items.front();
-			os << item->getPluralNameWithCount(counts[typeid(*item)]) << " here.";
-			break;
-		}
-		case 2: {
-			auto it = this->items.begin();
-			std::type_index firstType(typeid(**it));
-
-			os << "There are ";
-			os << (*it)->getPluralNameWithCount(counts[typeid(**it)]);
-			os << " and ";
-			do {
-				it++;
-			} while(firstType == std::type_index(typeid(**it)));
-			os << (*it)->getPluralNameWithCount(counts[typeid(**it)]);
-			os << " here.";
-			break;
-		}
-		default: {
-			std::unordered_set<std::type_index> seen;
-			auto it = this->items.begin();
-			os << "There are ";
-			for(size_t i = 0; i < counts.size(); i++) {
-				while (seen.find(std::type_index(typeid(**it))) != seen.end()) {
-					it++;
-				}
-
-				if(i == counts.size() - 1) {
-					os << "and ";
-				}
-				os << (*it)->getPluralNameWithCount(counts[typeid(**it)]);
-				if(i != counts.size() - 1) {
-					os << ", ";
-				}
-				seen.insert(std::type_index(typeid(**it)));
-			}
-			os << " here.";
-		}
+		case 1: return this->formatter->formatOneItem(this->items, counts);
+		case 2: return this->formatter->formatTwoItems(this->items, counts);
+		default: return this->formatter->formatManyItems(this->items, counts);
 	}
-
-	return os.str();
 }
 
 void ItemContainer::addItem(std::shared_ptr<Item> item) {
@@ -122,4 +77,100 @@ std::unordered_map<std::type_index, size_t> ItemContainer::getGroupedItemCounts(
 	}
 
 	return counts;
+}
+
+std::string RoomItemContainerFormatter::formatOneItem(std::list<std::shared_ptr<Item>>& items, std::unordered_map<std::type_index, size_t>& counts) {
+	std::ostringstream os;
+	os << "There ";
+	if(counts.begin()->second > 1) {
+		os << "are ";
+	} else {
+		os << "is ";
+	}
+	auto item = items.front();
+	os << item->getPluralNameWithCount(counts[typeid(*item)]) << " here.";
+	return os.str();
+}
+
+std::string RoomItemContainerFormatter::formatTwoItems(std::list<std::shared_ptr<Item>>& items, std::unordered_map<std::type_index, size_t>& counts) {
+	auto it = items.begin();
+	std::ostringstream os;
+	std::type_index firstType(typeid(**it));
+
+	os << "There are ";
+	os << (*it)->getPluralNameWithCount(counts[typeid(**it)]);
+	os << " and ";
+	do {
+		it++;
+	} while(firstType == std::type_index(typeid(**it)));
+	os << (*it)->getPluralNameWithCount(counts[typeid(**it)]);
+	os << " here.";
+	return os.str();
+}
+
+std::string RoomItemContainerFormatter::formatManyItems(std::list<std::shared_ptr<Item>>& items, std::unordered_map<std::type_index, size_t>& counts) {
+std::unordered_set<std::type_index> seen;
+	auto it = items.begin();
+	std::ostringstream os;
+	os << "There are ";
+
+	for(size_t i = 0; i < counts.size(); i++) {
+		while (seen.find(std::type_index(typeid(**it))) != seen.end()) {
+			it++;
+		}
+
+		if(i == counts.size() - 1) {
+			os << "and ";
+		}
+		os << (*it)->getPluralNameWithCount(counts[typeid(**it)]);
+		if(i != counts.size() - 1) {
+			os << ", ";
+		}
+		seen.insert(std::type_index(typeid(**it)));
+	}
+	os << " here.";
+	return os.str();
+}
+
+
+std::string InventoryItemContainerFormatter::formatOneItem(std::list<std::shared_ptr<Item>>& items, std::unordered_map<std::type_index, size_t>& counts) {
+	std::ostringstream os;
+	os << "Carrying: ";
+	auto item = items.front();
+	os << item->getPluralNameWithCount(counts[typeid(*item)]);
+	return os.str();
+}
+
+std::string InventoryItemContainerFormatter::formatTwoItems(std::list<std::shared_ptr<Item>>& items, std::unordered_map<std::type_index, size_t>& counts) {
+	auto it = items.begin();
+	std::ostringstream os;
+	std::type_index firstType(typeid(**it));
+
+	os << "Carrying: ";
+	os << (*it)->getPluralNameWithCount(counts[typeid(**it)]);
+	do {
+		it++;
+	} while(firstType == std::type_index(typeid(**it)));
+	os << ", " << (*it)->getPluralNameWithCount(counts[typeid(**it)]);
+	return os.str();
+}
+
+std::string InventoryItemContainerFormatter::formatManyItems(std::list<std::shared_ptr<Item>>& items, std::unordered_map<std::type_index, size_t>& counts) {
+std::unordered_set<std::type_index> seen;
+	auto it = items.begin();
+	std::ostringstream os;
+	os << "Carrying: ";
+
+	for(size_t i = 0; i < counts.size(); i++) {
+		while (seen.find(std::type_index(typeid(**it))) != seen.end()) {
+			it++;
+		}
+
+		os << (*it)->getPluralNameWithCount(counts[typeid(**it)]);
+		if(i != counts.size() - 1) {
+			os << ", ";
+		}
+		seen.insert(std::type_index(typeid(**it)));
+	}
+	return os.str();
 }

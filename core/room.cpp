@@ -74,6 +74,16 @@ std::string Room::describe() {
 	if(items != "") {
 		os << std::endl << this->itemContainer.describe();
 	}
+
+	os << std::endl << "Exits: ";
+	auto it = this->exits.begin();
+	os << it->first;
+	it++;
+	while(it != this->exits.end()) {
+		os << ", " << it->first;
+		it++;
+	}
+
 	return os.str();
 }
 

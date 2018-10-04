@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iostream>
 #include <string>
+#include <sstream>
 
 #include "room.h"
 
@@ -20,6 +21,7 @@ Room::Room(Driver& _driver)
 	, description("")
 	, driver(_driver)
     , exits()
+	, itemContainer()
 {
 
 }
@@ -73,7 +75,13 @@ std::string Room::dealiasName(std::string name) {
 }
 
 std::string Room::describe() { 
-	return this->description;
+	std::ostringstream os;
+	std::string items = this->itemContainer.describe();
+	os << this->description;
+	if(items != "") {
+		os << std::endl << this->itemContainer.describe();
+	}
+	return os.str();
 }
 
 void Room::setDescription(std::string _description) { 

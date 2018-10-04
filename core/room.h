@@ -6,6 +6,7 @@
 #include <iostream>
 
 #include "driver.h"
+#include "items/item_container.h"
 #include "traits/traits.h"
 #include "traits/describable.h"
 
@@ -31,4 +32,5 @@ class Room : public Traits<Describable> {
 		std::string description;
         Driver& driver;
         std::unordered_map<std::string, std::weak_ptr<Room>> exits;
+		ItemContainer itemContainer;
 };

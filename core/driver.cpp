@@ -44,6 +44,11 @@ Driver::Driver()
 				rooms[i][j-1]->addExit("east", rooms[i][j]);
 				rooms[i][j]->addExit("west", rooms[i][j-1]);
 			}
+
+			if(i > 0 && j < 2) {
+				rooms[i-1][j+1]->addExit("southwest", rooms[i][j]);
+				rooms[i][j]->addExit("northeast", rooms[i-1][j+1]);
+			}
 			rooms[i][j]->getItemContainer().addItem(std::make_shared<Coin>());
 			this->roomMaintainer.visit(rooms[i][j]);
 		}

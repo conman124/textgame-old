@@ -105,8 +105,8 @@ void ItemContainer::moveItemsInto(std::string itemName, ItemContainer& other) {
 	auto itemsToMove = this->retrieveItems(itemName);
 
 	for(auto item : itemsToMove) {
-		this->items.erase(item);
 		other.addItem(*item);
+		this->items.erase(item);
 	}
 }
 

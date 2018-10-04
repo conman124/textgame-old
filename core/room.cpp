@@ -6,17 +6,6 @@
 #include "room.h"
 #include "item_container.h"
 
-template <class T>
-bool operator==(const std::weak_ptr<T> weak, std::nullptr_t);
-
-// https://stackoverflow.com/a/45507610/1205493
-// Checks if a weak pointer is empty
-template <class T>
-bool operator==(const std::weak_ptr<T> weak, std::nullptr_t) {
-    using wt = std::weak_ptr<T>;
-    return !weak.owner_before(wt{}) && !wt{}.owner_before(weak);
-}
-
 Room::Room(Driver& _driver)
     : creatures()
 	, description("")
@@ -44,7 +33,10 @@ void Room::addExit(std::string name, std::shared_ptr<Room> room) {
 
 std::shared_ptr<Room> Room::getExit(std::string name) {
 	name = this->dealiasName(name);
-    return (this->exits[name] == nullptr) ? nullptr : this->exits[name].lock();
+	if(this->exits.find(name) == this->exits.end()) {
+		return nullptr;
+	}
+    return this->exits[name].lock();
 }
 
 std::string Room::dealiasName(std::string name) {

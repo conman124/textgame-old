@@ -13,6 +13,8 @@
 #include "player.h"
 #include "commands/core_command_provider.h"
 #include "items/coin.h"
+#include "items/sword.h"
+#include "items/cloak.h"
 
 Driver::Driver() 
     : roomMaintainer()
@@ -49,7 +51,12 @@ Driver::Driver()
 
 	rooms[1][1]->getItemContainer().addItem(std::make_shared<Coin>());
 	rooms[1][1]->getItemContainer().addItem(std::make_shared<Coin>());
+	rooms[1][1]->getItemContainer().addItem(std::make_shared<Sword>());
+	rooms[1][1]->getItemContainer().addItem(std::make_shared<Cloak>());
+	rooms[1][1]->getItemContainer().addItem(std::make_shared<Cloak>());
+
 	rooms[2][2]->getItemContainer().addItem(std::make_shared<Coin>());
+	rooms[2][2]->getItemContainer().addItem(std::make_shared<Sword>());
 
     this->player->moveToRoom(rooms[1][1]);
 }

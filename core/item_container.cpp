@@ -53,6 +53,10 @@ std::string ItemContainer::describe() {
 			auto it = this->items.begin();
 			os << "There are ";
 			for(size_t i = 0; i < counts.size(); i++) {
+				while (seen.find(std::type_index(typeid(**it))) != seen.end()) {
+					it++;
+				}
+
 				if(i == counts.size() - 1) {
 					os << "and ";
 				}
@@ -60,9 +64,7 @@ std::string ItemContainer::describe() {
 				if(i != counts.size() - 1) {
 					os << ", ";
 				}
-				do {
-					it++;
-				} while(seen.find(std::type_index(typeid(**it))) != seen.end());
+				seen.insert(std::type_index(typeid(**it)));
 			}
 			os << " here.";
 		}

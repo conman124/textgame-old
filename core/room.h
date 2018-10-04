@@ -7,14 +7,13 @@
 
 #include "driver.h"
 #include "item_container.h"
-#include "traits/traits.h"
 #include "traits/describable.h"
 
 class Creature;
 class Driver;
 class Room;
 
-class Room : public Traits<Describable> {
+class Room : public Describable {
     public:
         Room(Driver& driver);
         const std::unordered_set<std::shared_ptr<Creature>>& getCreatures();

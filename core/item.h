@@ -9,6 +9,8 @@ class Item : public HasName {
 		Item(std::string name);
 		std::string getName();
 		std::string getShortName();
+		std::string getPluralNameWithCount(size_t count);
+		std::string getPluralName();
 	private:
 		std::string name;
 };
